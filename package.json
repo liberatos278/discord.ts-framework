@@ -1,9 +1,13 @@
 {
   "name": "discord.ts-framework",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
-  "main": "dist/framework/main.js",
+  "main": "dist/framework/index.js",
   "types": "dist/framework/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liberatos278/discord.ts-framework.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,11 +16,11 @@
   "dependencies": {
     "discord.js": "^13.6.0",
     "enmap": "^5.8.8",
-    "fs": "^0.0.1-security"
-  },
-  "devDependencies": {
-    "typescript": "^4.6.2",
+    "fs": "^0.0.1-security",
     "@types/minimist": "^1.2.2",
     "@types/normalize-package-data": "^2.4.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.2"
   }
 }

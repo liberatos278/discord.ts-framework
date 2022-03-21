@@ -1,4 +1,4 @@
-dist
-node_modules
-src/*
-!src/framework
+dist/commands
+dist/events
+dist/main.js
+dist/main.d.ts
