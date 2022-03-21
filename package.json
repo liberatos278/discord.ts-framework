@@ -2,17 +2,21 @@
   "name": "discord.ts-framework",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/main.js",
+  "main": "dist/framework/main.js",
+  "types": "dist/framework/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Liberatos",
   "license": "MIT",
   "dependencies": {
-    "@types/minimist": "^1.2.2",
-    "@types/normalize-package-data": "^2.4.1",
     "discord.js": "^13.6.0",
     "enmap": "^5.8.8",
     "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.2",
+    "@types/minimist": "^1.2.2",
+    "@types/normalize-package-data": "^2.4.1"
   }
 }
