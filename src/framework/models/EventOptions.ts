@@ -1,6 +1,7 @@
 export interface EventOptions {
-    name: string
-    description: string
-    intents: number[]
-    execute: (...args: any[]) => Promise<any>
+    readonly name: string
+    readonly description: string
+    readonly intents: number[]
 }
+
+export type EventExecute = (...args: any[]) => Promise<any>

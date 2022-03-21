@@ -1,35 +1,50 @@
 import Discord, { Intents } from 'discord.js'
+import Enmap, { EnmapOptions } from 'enmap'
 import fs from 'fs'
+import { ClientModules } from './models/ClientModules'
 import { FrameworkOptions } from './models/FrameworkOptions'
+import { TableCollection } from './models/TableCollection'
+import { TableOptions } from './models/TableOptions'
 import { Client } from './modules/Client'
 import { Command } from './modules/Command'
 import { Event } from './modules/Event'
+import { log } from './modules/Logger'
+import { basename } from 'path'
 
 export class Framework {
 
     private _commands: Discord.Collection<string, Command> = new Discord.Collection()
     private _events: Discord.Collection<string, Event> = new Discord.Collection()
+    private _database: TableCollection = {}
 
     constructor(
         private readonly _options: FrameworkOptions
     ) { }
 
-    public async add(path: string): Promise<void> {
+    public async add(path: string): Promise<ClientModules> {
         try {
-            const files = fs.readdirSync(path)
+            const stat = await fs.promises.lstat(path)
+            let files: string[] = []
+
+            if (stat.isDirectory()) {
+                files = await fs.promises.readdir(path)
+            
+            } else if (stat.isFile()) {
+                files = [basename(path)]
+            }
 
             for (let file of files) {
-                const rawModule = await import(`${path}/${file}`)
+                const rawModule = stat.isDirectory() ? await import(`${path}/${file}`) : await import(path)
                 const moduleName = Object.keys(rawModule)[0] as string
 
                 const clientModule: Command | Event = rawModule[moduleName]
 
                 if (clientModule instanceof Command) {
-                    console.log('Command')
+                    log('framework', `Command \u001b[37;1m${moduleName}\u001b[0m loaded`)
                     this._commands.set(clientModule.options.name, clientModule)
 
                 } else if (clientModule instanceof Event) {
-                    console.log('Event')
+                    log('framework', `Event \u001b[37;1m${moduleName}\u001b[0m loaded`)
                     this._events.set(clientModule.options.name, clientModule)
 
                 } else {
@@ -39,14 +54,24 @@ export class Framework {
         } catch (err: unknown) {
             throw err
         }
+
+        const result: ClientModules = {
+            commands: Array.from(this._commands.values()),
+            events: Array.from(this._events.values()),
+        }
+
+        return result
     }
 
     public async init(): Promise<Client> {
+        log('client', 'Initializing client...')
+
         const client = new Client(
             this._options, 
             this.intents, 
             this._commands, 
-            this._events
+            this._events,
+            this._database
         )
 
         return client
@@ -54,6 +79,9 @@ export class Framework {
 
     private get intents(): Intents {
         const intents = new Intents()
+        const defaultIntents = [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
+
+        intents.add(defaultIntents)
 
         if (this._commands.size < 1 && this._events.size < 1)
             return intents
@@ -67,5 +95,12 @@ export class Framework {
         }
 
         return intents
+    }
+
+    public createEnmap(options: TableOptions): Enmap {
+        const database = new Enmap(options)
+
+        this._database[options.tableName] = database
+        return database
     }
 }
