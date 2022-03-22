@@ -51,45 +51,45 @@ const start = async () => {
 ## Framework options
 The most important settings related to the Discord client itself.
 
-```
+```js
 FrameworkOptions {
 	
 	// Discord client token
-	token: string
+	token: string,
 
 	// Pre-built handler options
 	handlerOptions?: {
 		
 		// Use Discord slash commands or message handler (default false)
-		useSlashCommands?: boolean
+		useSlashCommands?: boolean,
 		
 		// Prefix for message handler, required if 'useSlashCommands' is false
-		prefix?: string
+		prefix?: string,
 
 		// If true, the framework will ignore requests from bots (default false)
-		ignoreBots?: boolean
+		ignoreBots?: boolean,
 
 		// The case when the specified command does not exist
 		commandDoesNotExist?: {
 
 			// The message the bot sends if the command does not exist (default 'Command does not exist')
-			content?: string
+			content?: string,
 
 			// To turn off sending response messages (default false)
 			disable?: boolean
-		}
+		},
 		
 		insufficientPermissions?: {
 
 			// The message the bot sends if message author has insufficient permissions (default 'Insufficient permissions')
-			content?: string
+			content?: string,
 
 			// To turn off sending response messages (default false)
 			disable?: boolean
-		}
+		},
 		
 		// Declaration of permissions
-		permissions?: RolePermissions[]
+		permissions?: RolePermissions[],
 
 		// Disable pre-built command handler
 		disable?: boolean
@@ -101,12 +101,12 @@ FrameworkOptions {
 #### Permissions
 In the command handler we can declare the permission level for a role, using its ID. Everyone has a default permission level 0.
 
-```
+```js
 handlerOptions: {
 	permissions: [
 		{
 			// Required role identifier
-			roleId: Snowflake
+			roleId: Snowflake,
 			
 			// Level of authorization
 			level: number
