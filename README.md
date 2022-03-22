@@ -51,7 +51,7 @@ const start = async () => {
 ## Framework options
 The most important settings related to the Discord client itself.
 
-```js
+```
 FrameworkOptions {
 	
 	// Discord client token
@@ -101,7 +101,7 @@ FrameworkOptions {
 #### Permissions
 In the command handler we can declare the permission level for a role, using its ID. Everyone has a default permission level 0.
 
-```js
+```
 handlerOptions: {
 	permissions: [
 		{
