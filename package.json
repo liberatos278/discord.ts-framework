@@ -1,6 +1,6 @@
 {
   "name": "discord.ts-framework",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "",
   "main": "dist/framework/index.js",
   "types": "dist/framework/index.d.ts",
@@ -9,6 +9,7 @@
     "url": "https://github.com/liberatos278/discord.ts-framework.git"
   },
   "homepage": "https://adamek.wtf",
+  "keywords": ["discord.ts", "framework", "discord.ts-framework", "discord.js", "node.js", "javascript", "typescript", "bot", "client", "discord"],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon dist/main.js"
