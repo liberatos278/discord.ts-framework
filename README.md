@@ -124,6 +124,15 @@ Adds files or folders with commands or events to framework.
 - **init(): Client *(async)*** <br>
 It creates a client, which it then returns. This method creates event listeners for events and also logs in the client itself.
 
+- **createEnmap(options: TableOptions): Enmap** <br>
+Creates a database that is then stored in the client object according to the 'tableName' property. Table options are EnmapOptions that are extended by the property 'tableName', which is required.
+
+```js
+	f.createEnmap({ tableName: 'users', autoFetch: true })
+	
+	client.database.users.set('number', 5)
+```
+
 ## Creating command
 ```js
 export const ping = new Command({
