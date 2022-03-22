@@ -1,5 +1,5 @@
 import Discord, { Intents } from 'discord.js'
-import Enmap, { EnmapOptions } from 'enmap'
+import Enmap from 'enmap'
 import fs from 'fs'
 import { ClientModules } from './models/ClientModules'
 import { FrameworkOptions } from './models/FrameworkOptions'
@@ -11,7 +11,7 @@ import { Event } from './modules/Event'
 import { log } from './modules/Logger'
 import { basename } from 'path'
 
-export class Framework {
+export default class Framework {
 
     private _commands: Discord.Collection<string, Command> = new Discord.Collection()
     private _events: Discord.Collection<string, Event> = new Discord.Collection()
