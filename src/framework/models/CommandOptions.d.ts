@@ -1,5 +1,5 @@
 import { Intents } from "discord.js"
-import { CommandParameters } from "./CommandArgument"
+import { CommandParameters } from "./CommandParameters"
 
 export interface CommandOptions {
     readonly name: string

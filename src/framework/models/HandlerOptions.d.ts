@@ -7,6 +7,7 @@ export interface HandlerOptions {
     readonly ignoreBots?: boolean,
     readonly commandDoesNotExist?: ExtendedOptionProperty,
     readonly insufficientPermissions?: ExtendedOptionProperty,
+    readonly wrongCommandSyntax?: ExtendedOptionProperty,
     readonly permissions?: RolePermission[]
     readonly disable?: boolean
 }

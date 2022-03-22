@@ -87,6 +87,19 @@ interface FrameworkOptions {
 			// To turn off sending response messages (default false)
 			disable?: boolean
 		},
+	
+		wrongCommandSyntax?: {
+			// The message the bot sends if some of specified argument is wrong (default 'Argument {{name}} is not correct')
+			// We can also use variables:
+			// {{specified}} | Specified argument from author
+			// {{name}} | Name of expected argument
+			// {{description}} | Description of expected argument
+			// {{expected}} | Expected type of argument
+			content?: string,
+
+			// To turn off sending response messages (default false)
+			disable?: boolean
+		},
 		
 		// Declaration of permissions
 		permissions?: RolePermissions[],
@@ -161,6 +174,21 @@ We can specify the channels in which the command can be used. If 'null' is decla
 These are the channels in which the command is forbidden to be used. If 'null' is specified, this option is disabled. Channels are declared in the same way as for property allowed channels.
 
 #### Parameters
+They can be added using property parameters of the following form:
+
+```js
+parameters: [
+	{
+		name: 'member',
+		description: 'Member to mention',
+		type: ApplicationCommandOptionTypes.USER,
+		required: true,
+		long: false
+	}
+]
+```
+
+Also the built-in command handler will check the argument types. The long property will only be used if the slash command handler is not enabled. This option means that the argument to be specified by the user can consist of more than 1 word.
 
 ## Creating event
 The parameters that will be used in the function that is declared by the 'registerFunction' method are dynamic according to the selected event.
