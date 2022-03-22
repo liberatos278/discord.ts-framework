@@ -137,16 +137,25 @@ export const ping = new Command({
     parameters: []
 })
 
-ping.registerFunction(async () => {
+ping.registerFunction(async (client, message, args) => {
     console.log('You used ping command')
 })
 ```
 
 #### Intents
-#### Allowed & Disabled channels
+In command options you can also set the intents that the bot will need to execute the command. The intents are evaluated and automatically set before the bot is executed.
+
+#### Allowed channels
+We can specify the channels in which the command can be used. If 'null' is declared, this option is disabled. We declare channels using their IDs in string arrays format.
+
+#### Disabled channels
+These are the channels in which the command is forbidden to be used. If 'null' is specified, this option is disabled. Channels are declared in the same way as for property allowed channels.
+
 #### Parameters
 
 ## Creating event
+The parameters that will be used in the function that is declared by the 'registerFunction' method are dynamic according to the selected event.
+
 ```js
 export const ready = new Event({
     name: 'ready',
