@@ -98,8 +98,12 @@ export class Handler {
 
         for (const permission of this.options.permissions) {
 
-            if (member.roles.cache.has(permission.roleId))
+            if (member.roles.cache.has(permission.id) && permission.type === 'role') {
                 level = permission.level
+
+            } else if (member.id === permission.id && permission.type === 'user') {
+                level = permission.level
+            }
         }
 
         return level

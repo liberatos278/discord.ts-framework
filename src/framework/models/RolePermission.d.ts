@@ -1,6 +1,7 @@
 import { Snowflake } from "discord-api-types";
 
 export interface RolePermission {
-    roleId: Snowflake,
+    id: Snowflake
+    type: 'role' | 'user'
     level: number
 }

@@ -118,7 +118,7 @@ const options = handlerOptions {
 ## Methods
 Methods that can be used within the framework.
 
-- **add(path: string | string[]): ClientModules *(async)*** <br>
+- **add(path: string): ClientModules *(async)*** <br>
 Adds files or folders with commands or events to framework.
 
 - **init(): Client *(async)*** <br>
