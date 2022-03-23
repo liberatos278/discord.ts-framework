@@ -5,5 +5,5 @@ export interface CommandParameters {
     readonly description: string
     readonly type: ApplicationCommandOptionTypes
     readonly required: boolean
-    readonly long: boolean
+    readonly long?: boolean
 }

@@ -7,6 +7,7 @@ import { HandlerOptions } from "../models/HandlerOptions"
 import { Client } from "./Client"
 import { Command } from "./Command"
 import { log } from "./Logger"
+import { CommandParameters } from "../models/CommandParameters"
 
 export class Handler {
 
@@ -158,8 +159,22 @@ export class Handler {
     }
 
     private async checkArguments(command: Command, args: string[], message: Message): Promise<CommandSyntaxAnalysis> {
-        const params = command.options.parameters ?? []
+        let params = command.options.parameters ?? []
         let syntaxAnalysis: CommandSyntaxAnalysis = { result: true }
+
+        params = params.sort((a: CommandParameters, b: CommandParameters) => {
+            if (!a.required && b.required) {
+                return 1
+            }
+
+            if (a.long && !b.long) {
+                return 1
+            }
+
+            return -1
+        })
+
+        console.log(params)
 
         if (params.length < 1) 
             return syntaxAnalysis
