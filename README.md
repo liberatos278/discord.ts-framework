@@ -89,7 +89,8 @@ interface FrameworkOptions {
 		},
 	
 		wrongCommandSyntax?: {
-			// The message the bot sends if some of specified argument is wrong (default 'Argument {{name}} is not correct')
+			
+      // The message the bot sends if some of specified argument is wrong (default 'Argument {{name}} is not correct')
 			// We can also use variables:
 			// {{specified}} | Specified argument from author
 			// {{name}} | Name of expected argument
@@ -100,6 +101,15 @@ interface FrameworkOptions {
 			// To turn off sending response messages (default false)
 			disable?: boolean
 		},
+
+    commandCooldown?: {
+      
+      // The message the bot sends if message author is under command cooldown (default 'Take a break')
+			content?: string,
+
+			// To turn off sending response messages (default false)
+			disable?: boolean
+    },
 		
 		// Declaration of permissions
 		permissions?: RolePermissions[],

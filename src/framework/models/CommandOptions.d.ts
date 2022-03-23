@@ -6,6 +6,7 @@ export interface CommandOptions {
     readonly description: string
     readonly category: string
     readonly permissions: number
+    readonly cooldown: number
     readonly intents: number[]
     readonly allowedChannels: string[] | null
     readonly disabledChannels: string[] | null

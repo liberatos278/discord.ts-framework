@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from "discord-api-types"
-import { GuildMember, Message, Snowflake } from "discord.js"
+import { Collection, GuildMember, Message, Snowflake } from "discord.js"
 import { ApplicationCommandOptionTypes } from "discord.js/typings/enums"
 import { CommandSyntaxAnalysis } from "../models/CommandSyntaxAnalysis"
 import { CommandParametersTypes } from "../enums/CommandParameterTypes"
@@ -11,6 +11,7 @@ import { log } from "./Logger"
 export class Handler {
 
     public options!: HandlerOptions
+    private cooldowns: Collection<string, number> = new Collection()
 
     constructor(
         public client: Client
@@ -73,6 +74,24 @@ export class Handler {
 
                     return
                 }
+
+                const hasCooldown = this.cooldowns.get(`${message.guild.id}/${message.author.id}/${command.options.name}`)
+                if (hasCooldown) {
+                    const expired = Date.now() > command.options.cooldown + hasCooldown
+
+                    if (expired) {
+                        this.cooldowns.delete(`${message.guild.id}/${message.author.id}/${command.options.name}`)
+                    
+                    } else {
+                        if (!this.options.commandCooldown?.disable) {
+                            message.reply(this.options.commandCooldown?.content ?? 'Take a break')
+                        }
+
+                        return
+                    }
+                }
+                
+                this.cooldowns.set(`${message.guild.id}/${message.author.id}/${command.options.name}`, Date.now())
 
                 const areArgumentsCorrect = await this.checkArguments(command, args, message)
                 if (!areArgumentsCorrect.result) {
