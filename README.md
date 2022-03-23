@@ -122,14 +122,14 @@ interface FrameworkOptions {
 ```
 
 #### Permissions
-In the command handler we can declare the permission level for a role, using its ID. Everyone has a default permission level 0.
+In the command handler we can declare the permission level for a role or user, using its ID. Everyone has a default permission level 0.
 
 ```js
 const options = handlerOptions {
 	permissions: [
 		{
 			// Required role identifier
-			roleId: Snowflake,
+			id: Snowflake,
 			
 			// Level of authorization
 			level: number
