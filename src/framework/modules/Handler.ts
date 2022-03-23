@@ -218,6 +218,7 @@ export class Handler {
             return false
 
         switch (type) {
+            case ApplicationCommandOptionTypes.SUB_COMMAND:
             case ApplicationCommandOptionTypes.STRING:
                 return true
 
@@ -247,6 +248,12 @@ export class Handler {
                 const user = await this.client.users.fetch(userSnowflake).catch(() => false)
 
                 return user ? true : false
+
+            case ApplicationCommandOptionTypes.MENTIONABLE:
+                const mentionableSnowflake = this.getSnowflakeFromArg(arg)
+                const obj = await this.client.users.fetch(mentionableSnowflake).catch(() => false) || message.guild?.roles.cache.get(mentionableSnowflake)
+
+                return obj ? true : false
 
             default:
                 return false
