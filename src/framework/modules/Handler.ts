@@ -82,7 +82,7 @@ export class Handler {
 
                     if (expired) {
                         this.cooldowns.delete(`${message.guild.id}/${message.author.id}/${command.options.name}`)
-                    
+
                     } else {
                         if (!this.options.commandCooldown?.disable) {
                             message.reply(this.options.commandCooldown?.content ?? 'Take a break')
@@ -91,21 +91,21 @@ export class Handler {
                         return
                     }
                 }
-                
+
                 this.cooldowns.set(`${message.guild.id}/${message.author.id}/${command.options.name}`, Date.now())
 
                 const areArgumentsCorrect = await this.checkArguments(command, args, message)
                 if (!areArgumentsCorrect.result) {
                     if (!this.options.wrongCommandSyntax?.disable) {
                         message.reply(
-                            this.formatWrongSyntaxResponse(this.options.wrongCommandSyntax?.content, areArgumentsCorrect) ?? 
+                            this.formatWrongSyntaxResponse(this.options.wrongCommandSyntax?.content, areArgumentsCorrect) ??
                             `Argument **${areArgumentsCorrect.error?.wantedParam.name}** is not correct`
                         )
                     }
 
                     return
                 }
-                    
+
                 command.execute(this.client, message, args)
             }
         })
@@ -162,21 +162,24 @@ export class Handler {
         let params = command.options.parameters ?? []
         let syntaxAnalysis: CommandSyntaxAnalysis = { result: true }
 
-        params = params.sort((a: CommandParameters, b: CommandParameters) => {
-            if (!a.required && b.required) {
-                return 1
+        if (!this.options.useSlashCommands) {
+            let onlyOptional = false, onlyLong = false
+            for (let param of params) {
+                if (onlyOptional && param.required)
+                    throw new Error('Optional parameters must be after required ones')
+
+                if (onlyLong)
+                    throw new Error('Long parameters must be at the end')
+
+                if (!param.required)
+                    onlyOptional = true
+
+                if (param.long)
+                    onlyLong = true
             }
+        }
 
-            if (a.long && !b.long) {
-                return 1
-            }
-
-            return -1
-        })
-
-        console.log(params)
-
-        if (params.length < 1) 
+        if (params.length < 1)
             return syntaxAnalysis
 
         if (args.length < 1) {
@@ -200,11 +203,11 @@ export class Handler {
                         }
                     }
                 }
-                    
+
                 break
             }
 
-            if (wantedArg.required) {
+            if (!wantedArg.required) {
                 if (!arg) {
                     syntaxAnalysis.result = true
                     break
@@ -223,11 +226,21 @@ export class Handler {
                 }
 
                 continue
-            
+
             } else {
                 if (!arg) {
-                    if (args.length < 1)
+                    if (params.length < 1) {
                         syntaxAnalysis.result = true
+
+                    } else {
+                        syntaxAnalysis = {
+                            result: false,
+                            error: {
+                                specifiedParam: arg,
+                                wantedParam: wantedArg
+                            }
+                        }
+                    }
 
                     break
                 }
