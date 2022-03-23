@@ -76,7 +76,7 @@ export class Handler {
                 }
 
                 const hasCooldown = this.cooldowns.get(`${message.guild.id}/${message.author.id}/${command.options.name}`)
-                if (hasCooldown) {
+                if (hasCooldown && command.options.cooldown) {
                     const expired = Date.now() > command.options.cooldown + hasCooldown
 
                     if (expired) {
@@ -158,16 +158,17 @@ export class Handler {
     }
 
     private async checkArguments(command: Command, args: string[], message: Message): Promise<CommandSyntaxAnalysis> {
+        const params = command.options.parameters ?? []
         let syntaxAnalysis: CommandSyntaxAnalysis = { result: true }
 
-        if (command.options.parameters.length < 1) 
+        if (params.length < 1) 
             return syntaxAnalysis
 
         if (args.length < 1) {
             syntaxAnalysis.result = false
         }
 
-        for (const [key, wantedArg] of command.options.parameters.entries()) {
+        for (const [key, wantedArg] of params.entries()) {
             const arg = args[key as number]
 
             if (wantedArg.long && wantedArg.required) {

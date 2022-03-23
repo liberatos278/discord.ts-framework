@@ -163,6 +163,7 @@ export const ping = new Command({
     description: 'Get latency of bot',
     category: 'misc',
     permissions: 1,
+    cooldown: 1000,
     intents: [],
     allowedChannels: null,
     disabledChannels: null,
