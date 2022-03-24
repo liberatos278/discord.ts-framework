@@ -89,11 +89,13 @@ export default class Framework {
             return intents
 
         for(let command of Array.from(this._commands.values())) {
-            intents.add(command.options.intents)
+            if (command.options.intents)
+                intents.add(command.options.intents)
         }
 
         for(let event of Array.from(this._events.values())) {
-            intents.add(event.options.intents)
+            if (event.options.intents)
+                intents.add(event.options.intents)
         }
 
         return intents

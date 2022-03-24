@@ -44,13 +44,14 @@ export class Handler {
         this.client.on('messageCreate', async (message) => {
             if (this.hasMessagePrefix(message)) {
                 const content = message.content
-                const args: string[] = content.slice(this.options.prefix?.length).split(/ +/g)
+                
+                let args: string[] = content.slice(this.options.prefix?.length).split(/ +/g)
                 const commandName: string | undefined = args.shift()
 
                 if (!commandName || (message.author.bot && this.options.ignoreBots) || !message.guild)
                     return
 
-                const command = this.doesCommandExist(commandName.toLowerCase())
+                let command = this.doesCommandExist(commandName.toLowerCase())
 
                 if (!command) {
                     if (!this.options.commandDoesNotExist?.disable) {
@@ -60,6 +61,17 @@ export class Handler {
                     return
                 }
 
+                let commandData = command.getSubCommand(args)
+
+                if (!commandData) {
+                    message.reply('SUBCommand does not exist')
+                    return
+                
+                }
+
+                command = commandData.command
+                args = commandData.args
+
                 if (!message.member)
                     return
 
@@ -67,7 +79,7 @@ export class Handler {
                     return
 
                 const userPermissions = this.getUsersPermissionLevel(message.member)
-                if (userPermissions < command.options.permissions) {
+                if (userPermissions < (command.options.permissions ?? 0)) {
                     if (!this.options.insufficientPermissions?.disable) {
                         message.reply(this.options.insufficientPermissions?.content ?? 'Insufficient permissions')
                     }
