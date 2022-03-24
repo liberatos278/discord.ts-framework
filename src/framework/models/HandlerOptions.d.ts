@@ -1,5 +1,5 @@
 import { ExtendedOptionProperty } from "./ExtendedOptionProperty"
-import { RolePermission } from "./RolePermission"
+import { GuildPermission } from "./Permissions"
 
 export interface HandlerOptions {
     readonly useSlashCommands?: boolean
@@ -9,6 +9,6 @@ export interface HandlerOptions {
     readonly insufficientPermissions?: ExtendedOptionProperty
     readonly wrongCommandSyntax?: ExtendedOptionProperty
     readonly commandCooldown?: ExtendedOptionProperty
-    readonly permissions?: RolePermission[]
+    readonly permissions?: GuildPermission[]
     readonly disable?: boolean
 }

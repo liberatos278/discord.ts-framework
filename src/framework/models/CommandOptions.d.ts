@@ -1,5 +1,6 @@
 import { Intents } from "discord.js"
 import { CommandParameters } from "./CommandParameters"
+import { CommandRestrictions } from "./CommandRestrictions"
 
 export interface CommandOptions {
     readonly name: string
@@ -8,8 +9,8 @@ export interface CommandOptions {
     readonly permissions: number
     readonly cooldown?: number
     readonly intents: number[]
-    readonly allowedChannels?: string[] | null
-    readonly disabledChannels?: string[] | null
+    readonly allowedChannels?: CommandRestrictions[]
+    readonly disabledChannels?: CommandRestrictions[]
     readonly parameters?: CommandParameters[]
 }
 

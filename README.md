@@ -89,8 +89,8 @@ interface FrameworkOptions {
 		},
 	
 		wrongCommandSyntax?: {
-			
-      // The message the bot sends if some of specified argument is wrong (default 'Argument {{name}} is not correct')
+		
+            // The message the bot sends if some of specified argument is wrong (default 'Argument {{name}} is not correct')
 			// We can also use variables:
 			// {{specified}} | Specified argument from author
 			// {{name}} | Name of expected argument
@@ -104,7 +104,7 @@ interface FrameworkOptions {
 
     commandCooldown?: {
       
-      // The message the bot sends if message author is under command cooldown (default 'Take a break')
+            // The message the bot sends if message author is under command cooldown (default 'Take a break')
 			content?: string,
 
 			// To turn off sending response messages (default false)
@@ -122,17 +122,25 @@ interface FrameworkOptions {
 ```
 
 #### Permissions
-In the command handler we can declare the permission level for a role or user, using its ID. Everyone has a default permission level 0.
+In the command handler we can declare the permission level for a role or user, using its ID and guild ID. Everyone has a default permission level 0.
 
 ```js
 const options = handlerOptions {
 	permissions: [
 		{
-			// Required role identifier
-			id: Snowflake,
-			
-			// Level of authorization
-			level: number
+			guildId: '775024087520510042',
+			permissions: [
+			    {
+			        id: '371020157460829953',
+                    type: 'user',
+                    level: 1
+			    },
+			    {
+			        id: '457821157460829953',
+                    type: 'role',
+                    level: 5
+			    }
+			]
 		}
 	]
 }
@@ -152,7 +160,6 @@ Creates a database that is then stored in the client object according to the 'ta
 
 ```js
 	f.createEnmap({ tableName: 'users', autoFetch: true })
-	
 	client.database.users.set('number', 5)
 ```
 
@@ -179,7 +186,16 @@ ping.registerFunction(async (client, message, args) => {
 In command options you can also set the intents that the bot will need to execute the command. The intents are evaluated and automatically set before the bot is executed.
 
 #### Allowed channels
-We can specify the channels in which the command can be used. If 'null' is declared, this option is disabled. We declare channels using their IDs in string arrays format.
+We can specify the channels in which the command can be used. The channels are defined using the CommandRestrictions structure:
+
+```js
+allowedChannels: [
+    {
+        guildId: '775024087520510042',
+        channels: ['789524087520510042', '457024087575216042']
+    }
+]
+```
 
 #### Disabled channels
 These are the channels in which the command is forbidden to be used. If 'null' is specified, this option is disabled. Channels are declared in the same way as for property allowed channels.

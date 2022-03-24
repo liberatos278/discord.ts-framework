@@ -1,4 +1,3 @@
-import { ApplicationCommandOptionType } from "discord-api-types"
 import { Collection, GuildMember, Message, Snowflake } from "discord.js"
 import { ApplicationCommandOptionTypes } from "discord.js/typings/enums"
 import { CommandSyntaxAnalysis } from "../models/CommandSyntaxAnalysis"
@@ -7,7 +6,7 @@ import { HandlerOptions } from "../models/HandlerOptions"
 import { Client } from "./Client"
 import { Command } from "./Command"
 import { log } from "./Logger"
-import { CommandParameters } from "../models/CommandParameters"
+import { GuildPermission } from "../models/Permissions"
 
 export class Handler {
 
@@ -64,7 +63,7 @@ export class Handler {
                 if (!message.member)
                     return
 
-                if (!this.isChannelAllowedForCommand(command, message.channelId))
+                if (!this.isChannelAllowedForCommand(command, message.channelId, message.guildId))
                     return
 
                 const userPermissions = this.getUsersPermissionLevel(message.member)
@@ -127,10 +126,12 @@ export class Handler {
     private getUsersPermissionLevel(member: GuildMember): number {
         let level = 0
 
-        if (!this.options.permissions)
+        const guildPermissions = this.options.permissions?.find((p: GuildPermission) => p.guildId === member.guild.id)
+
+        if (!guildPermissions)
             return level
 
-        for (const permission of this.options.permissions) {
+        for (const permission of guildPermissions.permissions) {
 
             if (member.roles.cache.has(permission.id) && permission.type === 'role') {
                 level = permission.level
@@ -143,16 +144,24 @@ export class Handler {
         return level
     }
 
-    private isChannelAllowedForCommand(command: Command, channelId: Snowflake): boolean {
+    private isChannelAllowedForCommand(command: Command, channelId: Snowflake, guildId: Snowflake | null): boolean {
         let result = false
 
-        if (command.options.allowedChannels) {
-            result = command.options.allowedChannels.includes(channelId)
+        if (!guildId)
+            return false
+
+        const forGuildAllowed = command.options.allowedChannels?.find(r => r.guildId === guildId)
+        const forGuildDisabled = command.options.disabledChannels?.find(r => r.guildId === guildId)
+        
+        console.log(forGuildAllowed, forGuildDisabled)
+
+        if (forGuildAllowed) {
+            result = forGuildAllowed.channels.includes(channelId)
         } else
             result = true
 
-        if (result && command.options.disabledChannels) {
-            result = !command.options.disabledChannels.includes(channelId)
+        if (result && forGuildDisabled) {
+            result = !forGuildDisabled.channels.includes(channelId)
         }
 
         return result
