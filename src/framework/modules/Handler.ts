@@ -64,9 +64,11 @@ export class Handler {
                 let commandData = command.getSubCommand(args)
 
                 if (!commandData) {
-                    message.reply('SUBCommand does not exist')
+                    if (!this.options.subCommandDoesNotExist?.disable) {
+                        message.reply(this.options.subCommandDoesNotExist?.content ?? 'Sub-command does not exist')
+                    }
+
                     return
-                
                 }
 
                 command = commandData.command

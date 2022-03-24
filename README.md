@@ -232,6 +232,20 @@ parameters: [
 
 Also the built-in command handler will check the argument types. The long property will only be used if the slash command handler is not enabled. This option means that the argument to be specified by the user can consist of more than 1 word.
 
+## Sub commands
+You can also create a sub command using a parameter in the parent command. The sub command has limited capabilities, but behaves like the command itself. Sub commands can be registered as follows:
+
+```js
+ping.registerSubCommand({
+    name: 'sub1',
+    permissions: 5,
+    parameters: []
+    
+}, async (client, message, args) => {
+        console.log('sub comma')
+})
+```
+
 ## Creating event
 The parameters that will be used in the function that is declared by the 'registerFunction' method are dynamic according to the selected event.
 
