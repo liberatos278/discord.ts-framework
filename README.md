@@ -163,6 +163,21 @@ Creates a database that is then stored in the client object according to the 'ta
 	client.database.users.set('number', 5)
 ```
 
+- **addPermissions(permissions: IdentificatorPermission | IdentificatorPermission[], guildId: string): GuildPermission** <br>
+Dynamically adds permissions in the form of an array or standalone to a given guild ID. 
+
+- **setPrefix(prefix: string): string** <br>
+Sets a prefix that only the message handler will respond to if enabled.
+
+- **disableCommandHandler(toggle: boolean): boolean** <br>
+Disables the built-in command handler module.
+
+- **ignoreBots(toggle: boolean): boolean** <br>
+The built-in command handler will not respond to BOT clients.
+
+- **useSlashCommands(toggle: boolean): boolean** <br>
+Selects the command handler strategy, either message handler (false) or Discord slash commands handler (true)
+
 ## Creating command
 ```js
 export const ping = new Command({

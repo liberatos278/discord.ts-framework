@@ -152,8 +152,6 @@ export class Handler {
 
         const forGuildAllowed = command.options.allowedChannels?.find(r => r.guildId === guildId)
         const forGuildDisabled = command.options.disabledChannels?.find(r => r.guildId === guildId)
-        
-        console.log(forGuildAllowed, forGuildDisabled)
 
         if (forGuildAllowed) {
             result = forGuildAllowed.channels.includes(channelId)

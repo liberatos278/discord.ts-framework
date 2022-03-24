@@ -10,6 +10,8 @@ import { Command } from './modules/Command'
 import { Event } from './modules/Event'
 import { log } from './modules/Logger'
 import { basename } from 'path'
+import { Snowflake } from 'discord-api-types'
+import { GuildPermission, IdentificatorPermission } from './models/Permissions'
 
 export default class Framework {
 
@@ -102,5 +104,42 @@ export default class Framework {
 
         this._database[options.tableName] = database
         return database
+    }
+
+    public addPermissions(permissions: IdentificatorPermission | IdentificatorPermission[], guildId: Snowflake): GuildPermission {
+
+        if (!Array.isArray(permissions))
+            permissions = [permissions]
+
+        const data: GuildPermission = {
+            guildId,
+            permissions
+        }
+
+        if (!this._options.handlerOptions.permissions)
+            this._options.handlerOptions.permissions = []
+
+        this._options.handlerOptions.permissions.push(data)
+        return data
+    }
+
+    public setPrefix(prefix: string): string {
+        this._options.handlerOptions.prefix = prefix
+        return prefix
+    }
+
+    public disableCommandHandler(toggle: boolean): boolean {
+        this._options.handlerOptions.disable = toggle
+        return toggle
+    }
+
+    public ignoreBots(toggle: boolean): boolean {
+        this._options.handlerOptions.ignoreBots = toggle
+        return toggle
+    }
+
+    public useSlashCommands(toggle: boolean): boolean {
+        this._options.handlerOptions.useSlashCommands = toggle
+        return toggle
     }
 }
