@@ -1,6 +1,6 @@
 {
   "name": "discord.ts-framework",
-  "version": "1.0.95",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/framework/index.js",
   "types": "dist/framework/index.d.ts",
