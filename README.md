@@ -57,6 +57,16 @@ interface FrameworkOptions {
 	// Discord client token
 	token: string,
 
+  // The client identifier that will be used
+  clientId: string,
+
+  devMode: {
+
+    // Thanks to this feature, slash commands will only register on guild ID, which will speed up registration and work
+    toggle: boolean,
+    guildId: string
+  },
+
 	// Pre-built handler options
 	handlerOptions?: {
 		
@@ -73,6 +83,16 @@ interface FrameworkOptions {
 		commandDoesNotExist?: {
 
 			// The message the bot sends if the command does not exist (default 'Command does not exist')
+			content?: string,
+
+			// To turn off sending response messages (default false)
+			disable?: boolean
+		},
+
+    // The case when the specified sub-command does not exist
+		subCommandDoesNotExist?: {
+
+			// The message the bot sends if the sub-command does not exist (default 'Sub-command does not exist')
 			content?: string,
 
 			// To turn off sending response messages (default false)
@@ -192,6 +212,7 @@ export const ping = new Command({
     parameters: []
 })
 
+// When using the message handler, the function will have parameters client, message, args. However, with the slash command handler, it will only be client, interaction
 ping.registerFunction(async (client, message, args) => {
     console.log('You used ping command')
 })
@@ -233,7 +254,7 @@ parameters: [
 Also the built-in command handler will check the argument types. The long property will only be used if the slash command handler is not enabled. This option means that the argument to be specified by the user can consist of more than 1 word.
 
 ## Sub commands
-You can also create a sub command using a parameter in the parent command. The sub command has limited capabilities, but behaves like the command itself. Sub commands can be registered as follows:
+You can also create a sub command using a parameter in the parent command. The sub command has limited capabilities, but behaves like the command itself. It is also necessary to add one parameter to the main command with type 'SUB_COMMAND'. Sub commands can be registered as follows:
 
 ```js
 ping.registerSubCommand({

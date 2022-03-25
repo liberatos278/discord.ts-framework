@@ -12,6 +12,12 @@ import { log } from './modules/Logger'
 import { basename } from 'path'
 import { Snowflake } from 'discord-api-types'
 import { GuildPermission, IdentificatorPermission } from './models/Permissions'
+import { SlashCommandBuilder } from '@discordjs/builders'
+import { APIApplicationCommandOption, Routes } from "discord-api-types/v9"
+import { REST } from "@discordjs/rest"
+import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
+
+const rest: REST = new REST({ version: '9' })
 
 export default class Framework {
 
@@ -30,7 +36,7 @@ export default class Framework {
 
             if (stat.isDirectory()) {
                 files = await fs.promises.readdir(path)
-            
+
             } else if (stat.isFile()) {
                 files = [basename(path)]
             }
@@ -69,14 +75,110 @@ export default class Framework {
         log('client', 'Initializing client...')
 
         const client = new Client(
-            this._options, 
-            this.intents, 
-            this._commands, 
+            this._options,
+            this.intents,
+            this._commands,
             this._events,
             this._database
         )
 
+        if (this._options.handlerOptions.useSlashCommands) {
+            rest.setToken(this._options.token)
+            await this.registerSlashCommands(client)
+        }
+
         return client
+    }
+
+    private async registerSlashCommands(client: Client): Promise<void> {
+        const commands = Array.from(client.commands.values())
+        const toRegister = []
+
+        log('handler', 'Registering slash commands...')
+
+        for (const command of commands) {
+            const slash = new SlashCommandBuilder()
+                .setName(command.options.name)
+                .setDescription(command.options.description ?? '')
+                .setDefaultPermission(true)
+                .toJSON()
+
+            const options: APIApplicationCommandOption[] = []
+
+            if (command.options.parameters) {
+                for (const option of command.options.parameters) {
+                    const data = {
+                        name: option.name,
+                        type: option.type,
+                        description: option.description,
+                        required: option.required ?? false,
+                        options: [{}]
+                    }
+
+                    data.options = []
+
+                    if (option.type === ApplicationCommandOptionTypes.SUB_COMMAND) {
+                        const fullCommand = this._commands.get(command.options.name)
+
+                        if (fullCommand) {
+                            const subCommands = Array.from(fullCommand.subCommands.values())
+
+                            for (const subCommand of subCommands) {
+                                if (subCommand) {
+
+                                    const newSub = {
+                                        name: subCommand.data.name,
+                                        type: ApplicationCommandOptionTypes.SUB_COMMAND,
+                                        description: subCommand.data.description,
+                                        required: false,
+                                        options: [{}]
+                                    }
+
+                                    newSub.options = []
+
+                                    if (subCommand.data.parameters) {
+                                        
+                                        const subParams = subCommand.data.parameters
+                                        for (const subOptions of subParams) {
+                                            newSub.options.push({
+                                                name: subOptions.name,
+                                                type: subOptions.type,
+                                                description: subOptions.description,
+                                                required: subOptions.required ?? false
+                                            })
+                                        }
+                                    }
+
+                                    options.push(newSub as any)
+                                }
+                            }
+                        }
+                    } else {
+                        options.push(data)
+                    }
+                }
+            }
+
+            slash.options = options
+            toRegister.push(slash)
+        }
+
+        try {
+            if (this._options.devMode?.toggle) {
+                await rest.put(
+                    Routes.applicationGuildCommands(this._options.clientId, this._options.devMode.guildId),
+                    { body: toRegister }
+                )
+            } else {
+                await rest.put(
+                    Routes.applicationCommands(this._options.clientId),
+                    { body: toRegister }
+                )
+            }
+
+        } catch (err: unknown) {
+            throw err
+        }
     }
 
     private get intents(): Intents {
@@ -88,12 +190,12 @@ export default class Framework {
         if (this._commands.size < 1 && this._events.size < 1)
             return intents
 
-        for(let command of Array.from(this._commands.values())) {
+        for (let command of Array.from(this._commands.values())) {
             if (command.options.intents)
                 intents.add(command.options.intents)
         }
 
-        for(let event of Array.from(this._events.values())) {
+        for (let event of Array.from(this._events.values())) {
             if (event.options.intents)
                 intents.add(event.options.intents)
         }

@@ -1,4 +1,4 @@
-import { Collection, GuildMember, Message, Snowflake } from "discord.js"
+import { Collection, GuildMember, Interaction, Message, Snowflake } from "discord.js"
 import { ApplicationCommandOptionTypes } from "discord.js/typings/enums"
 import { CommandSyntaxAnalysis } from "../models/CommandSyntaxAnalysis"
 import { CommandParametersTypes } from "../enums/CommandParameterTypes"
@@ -25,7 +25,7 @@ export class Handler {
 
         if (handlerOptions.useSlashCommands) {
             this.registerSlashHandler()
-            log('handler', 'Registering slash commands...')
+            log('handler', 'Creating slash commands handler...')
 
         } else {
             this.registerCustomHandler()
@@ -34,7 +34,71 @@ export class Handler {
     }
 
     private registerSlashHandler(): void {
+        this.client.on('interactionCreate', async (interaction: Interaction) => {
+            if (!interaction.guild || !interaction.isCommand())
+                return
 
+            const commandName = interaction.commandName
+            let command = this.doesCommandExist(commandName)
+
+            if ((interaction.user.bot && this.options.ignoreBots) || !(interaction.member instanceof GuildMember))
+                return
+
+            if (!command) {
+                if (!this.options.commandDoesNotExist?.disable) {
+                    interaction.reply(this.options.commandDoesNotExist?.content ?? 'Command does not exist')
+                }
+
+                return
+            }
+
+            const subCommand = interaction.options.getSubcommand(false)
+            
+            if (subCommand) {
+                let subData = command?.getSubCommand([subCommand])
+            
+                if (!subData) {
+                    if (!this.options.subCommandDoesNotExist?.disable) {
+                        interaction.reply(this.options.subCommandDoesNotExist?.content ?? 'Sub-command does not exist')
+                    }
+    
+                    return
+                }
+    
+                command = subData.command
+            }
+
+            if (!this.isChannelAllowedForCommand(command, interaction.channelId, interaction.guildId))
+                return
+
+            const userPermissions = this.getUsersPermissionLevel(interaction.member)
+            if (userPermissions < (command.options.permissions ?? 0)) {
+                if (!this.options.insufficientPermissions?.disable) {
+                    interaction.reply(this.options.insufficientPermissions?.content ?? 'Insufficient permissions')
+                }
+
+                return
+            }
+
+            const hasCooldown = this.cooldowns.get(`${interaction.guild.id}/${interaction.user.id}/${command.options.name}`)
+            if (hasCooldown && command.options.cooldown) {
+                const expired = Date.now() > command.options.cooldown + hasCooldown
+
+                if (expired) {
+                    this.cooldowns.delete(`${interaction.guild.id}/${interaction.user.id}/${command.options.name}`)
+
+                } else {
+                    if (!this.options.commandCooldown?.disable) {
+                        interaction.reply(this.options.commandCooldown?.content ?? 'Take a break')
+                    }
+
+                    return
+                }
+            }
+
+            this.cooldowns.set(`${interaction.guild.id}/${interaction.user.id}/${command.options.name}`, Date.now())
+            command.execute(this.client, interaction)
+        })
     }
 
     private registerCustomHandler(): void {
@@ -44,7 +108,7 @@ export class Handler {
         this.client.on('messageCreate', async (message) => {
             if (this.hasMessagePrefix(message)) {
                 const content = message.content
-                
+
                 let args: string[] = content.slice(this.options.prefix?.length).split(/ +/g)
                 const commandName: string | undefined = args.shift()
 
