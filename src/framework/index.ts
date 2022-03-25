@@ -28,6 +28,10 @@ export default class Framework {
     constructor(
         private readonly _options: FrameworkOptions
     ) { }
+    
+    /*
+        Přidání modulů do Frameworku
+    */
 
     public async add(path: string): Promise<ClientModules> {
         try {
@@ -71,6 +75,10 @@ export default class Framework {
         return result
     }
 
+    /*
+        Iniciace klienta
+    */
+
     public async init(): Promise<Client> {
         log('client', 'Initializing client...')
 
@@ -90,11 +98,21 @@ export default class Framework {
         return client
     }
 
+    /*
+        Registrace Slash Commands
+    */
+
     private async registerSlashCommands(client: Client): Promise<void> {
         const commands = Array.from(client.commands.values())
         const toRegister = []
 
         log('handler', 'Registering slash commands...')
+
+        /*
+            Upraví datový objekt parametrů (options) pro jednotlivé příkazy. Dále pokud se v parametrech
+            nachází parametr typu sub command, vytáhne všechny registrované subcommandy, které po jednom 
+            zapíše jako samotný command (kvůli přechodu z message handleru na slash handler)
+        */
 
         for (const command of commands) {
             const slash = new SlashCommandBuilder()
@@ -180,6 +198,10 @@ export default class Framework {
             throw err
         }
     }
+
+    /*
+        Others
+    */
 
     private get intents(): Intents {
         const intents = new Intents()

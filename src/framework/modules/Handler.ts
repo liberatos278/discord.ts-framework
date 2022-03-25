@@ -17,6 +17,10 @@ export class Handler {
         public client: Client
     ) { }
 
+    /*
+        Iniciace Handleru
+    */
+
     public start(handlerOptions: HandlerOptions): void {
         this.options = handlerOptions
 
@@ -32,6 +36,10 @@ export class Handler {
             log('handler', 'Native handler created')
         }
     }
+
+    /*
+        Registrace slash handleru
+    */
 
     private registerSlashHandler(): void {
         this.client.on('interactionCreate', async (interaction: Interaction) => {
@@ -100,6 +108,10 @@ export class Handler {
             command.execute(this.client, interaction)
         })
     }
+
+    /*
+        Registrace message handleru
+    */
 
     private registerCustomHandler(): void {
         if (!this.options.prefix)
@@ -187,6 +199,10 @@ export class Handler {
             }
         })
     }
+
+    /*
+        Others
+    */
 
     private hasMessagePrefix(message: Message): boolean {
         const content: string = message.content
