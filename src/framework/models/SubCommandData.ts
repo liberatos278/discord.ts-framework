@@ -1,3 +1,6 @@
+import { CommandParameters } from "./CommandParameters"
+import { CommandRestrictions } from "./CommandRestrictions"
+
 export interface SubCommandData {
     readonly name: string
     readonly description: string

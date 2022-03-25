@@ -1,12 +1,16 @@
 {
   "name": "discord.ts-framework",
-  "version": "1.1.0",
+  "version": "1.1.25",
   "description": "",
   "main": "dist/framework/index.js",
-  "types": "dist/framework/index.d.ts",
+  "types": "dist/typing/framework/index.d.ts",
+  "files": ["dist/framework", "dist/typing/framework"],
   "repository": {
     "type": "git",
     "url": "https://github.com/liberatos278/discord.ts-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/liberatos278/discord.ts-framework/issues"
   },
   "homepage": "https://adamek.wtf",
   "keywords": ["discord.ts", "framework", "discord.ts-framework", "discord.js", "node.js", "javascript", "typescript", "bot", "client", "discord"],
@@ -26,5 +30,9 @@
   "devDependencies": {
     "nodemon": "^2.0.15",
     "typescript": "^4.6.2"
+  },
+  "engines": {
+    "node": ">=16.6.0",
+    "npm": ">=7.0.0"
   }
 }

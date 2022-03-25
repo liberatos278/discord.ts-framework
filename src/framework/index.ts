@@ -121,7 +121,7 @@ export default class Framework {
                 .setDefaultPermission(true)
                 .toJSON()
 
-            const options: APIApplicationCommandOption[] = []
+            const options = []
 
             if (command.options.parameters) {
                 for (const option of command.options.parameters) {
@@ -130,7 +130,7 @@ export default class Framework {
                         type: option.type,
                         description: option.description,
                         required: option.required ?? false,
-                        options: [{}]
+                        options: []
                     }
 
                     data.options = []

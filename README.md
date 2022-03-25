@@ -57,15 +57,15 @@ interface FrameworkOptions {
 	// Discord client token
 	token: string,
 
-  // The client identifier that will be used
-  clientId: string,
+  	// The client identifier that will be used
+  	clientId: string,
 
-  devMode: {
+  	devMode: {
 
-    // Thanks to this feature, slash commands will only register on guild ID, which will speed up registration and work
-    toggle: boolean,
-    guildId: string
-  },
+    	// Thanks to this feature, slash commands will only register on guild ID, which will speed up registration and work
+    	toggle: boolean,
+    	guildId: string
+  	},
 
 	// Pre-built handler options
 	handlerOptions?: {
@@ -89,7 +89,7 @@ interface FrameworkOptions {
 			disable?: boolean
 		},
 
-    // The case when the specified sub-command does not exist
+    	// The case when the specified sub-command does not exist
 		subCommandDoesNotExist?: {
 
 			// The message the bot sends if the sub-command does not exist (default 'Sub-command does not exist')
@@ -122,14 +122,14 @@ interface FrameworkOptions {
 			disable?: boolean
 		},
 
-    commandCooldown?: {
+    	commandCooldown?: {
       
             // The message the bot sends if message author is under command cooldown (default 'Take a break')
 			content?: string,
 
 			// To turn off sending response messages (default false)
 			disable?: boolean
-    },
+    	},
 		
 		// Declaration of permissions
 		permissions?: RolePermissions[],
@@ -150,16 +150,16 @@ const options = handlerOptions {
 		{
 			guildId: '775024087520510042',
 			permissions: [
-			    {
-			        id: '371020157460829953',
-                    type: 'user',
-                    level: 1
-			    },
-			    {
-			        id: '457821157460829953',
-                    type: 'role',
-                    level: 5
-			    }
+				{
+			    	id: '371020157460829953',
+                	type: 'user',
+                	level: 1
+				},
+				{
+			    	id: '457821157460829953',
+                	type: 'role',
+                	level: 5
+				}
 			]
 		}
 	]
