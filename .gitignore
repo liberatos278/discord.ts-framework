@@ -1,6 +1,5 @@
 dist
 node_modules
-src/*
-!src/framework
 .npmignore
 todo.txt
+test

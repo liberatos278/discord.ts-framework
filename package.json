@@ -1,10 +1,13 @@
 {
   "name": "discord.ts-framework",
-  "version": "1.1.25",
+  "version": "1.1.31",
   "description": "",
   "main": "dist/framework/index.js",
-  "types": "dist/typing/framework/index.d.ts",
-  "files": ["dist/framework", "dist/typing/framework"],
+  "type": "commonjs",
+  "types": "dist/types/types.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/liberatos278/discord.ts-framework.git"
@@ -13,10 +16,22 @@
     "url": "https://github.com/liberatos278/discord.ts-framework/issues"
   },
   "homepage": "https://adamek.wtf",
-  "keywords": ["discord.ts", "framework", "discord.ts-framework", "discord.js", "node.js", "javascript", "typescript", "bot", "client", "discord"],
+  "keywords": [
+    "discord.ts",
+    "framework",
+    "discord.ts-framework",
+    "discord.js",
+    "node.js",
+    "javascript",
+    "typescript",
+    "bot",
+    "client",
+    "discord"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon dist/main.js"
+    "dev": "nodemon dist/main.js",
+    "build": "webpack"
   },
   "author": "Liberatos",
   "license": "MIT",
@@ -29,7 +44,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.3"
   },
   "engines": {
     "node": ">=16.6.0",

@@ -13,7 +13,7 @@ import { basename } from 'path'
 import { Snowflake } from 'discord-api-types'
 import { GuildPermission, IdentificatorPermission } from './models/Permissions'
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { APIApplicationCommandOption, Routes } from "discord-api-types/v9"
+import { Routes } from "discord-api-types/v9"
 import { REST } from "@discordjs/rest"
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
 
