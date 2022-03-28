@@ -1,10 +1,10 @@
 {
   "name": "discord.ts-framework",
-  "version": "1.1.31",
+  "version": "1.1.4",
   "description": "",
-  "main": "dist/framework/index.js",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "type": "commonjs",
-  "types": "dist/types/types.d.ts",
   "files": [
     "dist"
   ],

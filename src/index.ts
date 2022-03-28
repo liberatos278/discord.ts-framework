@@ -17,6 +17,28 @@ import { Routes } from "discord-api-types/v9"
 import { REST } from "@discordjs/rest"
 import { ApplicationCommandOptionTypes } from 'discord.js/typings/enums'
 
+export * from './enums/CommandParameterTypes'
+export * from './models/ClientModules'
+export * from './models/CommandOptions'
+export * from './models/CommandParameters'
+export * from './models/CommandRestrictions'
+export * from './models/CommandSyntaxAnalysis'
+export * from './models/EventOptions'
+export * from './models/ExtendedOptionProperty'
+export * from './models/FrameworkOptions'
+export * from './models/HandlerOptions'
+export * from './models/Permissions'
+export * from './models/TableOptions'
+export * from './models/SubCommand'
+export * from './models/SubCommandData'
+export * from './models/SubCommandResult'
+export * from './models/TableCollection'
+export * from './modules/Client'
+export * from './modules/Command'
+export * from './modules/Event'
+export * from './modules/Logger'
+export * from './modules/Handler'
+
 const rest: REST = new REST({ version: '9' })
 
 export default class Framework {
